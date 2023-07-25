@@ -1,0 +1,6 @@
+[submodule "src/src/InvSys.Web"]
+	path = src/src/InvSys.Web
+	url = git@github.com:prLorence/InvSys.Web.git
+[submodule "src/InvSys.Web"]
+	path = src/InvSys.Web
+	url = git@github.com:prLorence/InvSys.Web.git
