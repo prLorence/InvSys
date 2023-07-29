@@ -1,33 +1,42 @@
 using InvSys.Application.Common;
+using InvSys.Application.Common.Models;
 using InvSys.Application.ValueObjects;
 
 namespace InvSys.Application.Entities;
 
-public class Product : AuditableEntity, IHasDomainEvent
+public sealed class Product : AuditableEntity<ProductId>, IHasDomainEvent
 {
     public string Name { get; private set; }
-
-    // TODO: create value object for this
     public SKU SKU { get; private set; }
     public string Condition { get; private set; }
-    public string Location { get; private set; }
-    public int AvailableQuantity { get; private set; }
-    public int StockQuantity { get; private set; }
+    public ProductLocation Location { get; private set; }
+    public ProductQuantity AvailableQuantity { get; private set; }
+    public ProductQuantity StockQuantity { get; private set; }
+    public ProductPrice Price { get; private set; }
 
-    // TODO: create value object for this
-    public Price Price { get; private set; }
+    public List<DomainEvent> DomainEvents { get; } = new List<DomainEvent>();
 
-    public List<DomainEvent> DomainEvents => new List<DomainEvent>();
+    public DateTime CreatedDateTime { get; private set; }
 
-    private Product(string name,
-                    SKU sku,
-                    string condition,
-                    string location,
-                    int availableQuantity,
-                    int stockQuantity,
-                    Price price,
-                    DateTime createdDateTime,
-                    DateTime updatedDateTime) : base(createdDateTime, updatedDateTime)
+    public DateTime UpdatedDateTime { get; }
+
+#pragma warning disable CS8618
+    private Product()
+    {
+    }
+#pragma warning restore CS8618
+
+    private Product(
+        ProductId productId,
+        string name,
+        SKU sku,
+        string condition,
+        ProductLocation location,
+        ProductQuantity availableQuantity,
+        ProductQuantity stockQuantity,
+        ProductPrice price,
+        DateTime createdDateTime,
+        DateTime updatedDateTime) : base(productId)
     {
         Name = name;
         SKU = sku;
@@ -36,40 +45,62 @@ public class Product : AuditableEntity, IHasDomainEvent
         AvailableQuantity = availableQuantity;
         StockQuantity = stockQuantity;
         Price = price;
+        CreatedDateTime = createdDateTime;
+        UpdatedDateTime = updatedDateTime;
     }
 
-    public Product Create(string name,
-                          SKU sku,
+    public static Product Create(
+                          string name,
+                          string sku,
                           string condition,
-                          string location,
+                          ProductLocation location,
                           int availableQuantity,
                           int stockQuantity,
-                          Price price)
+                          double price)
     {
-        var product = new Product(
+        return new Product(
+                ProductId.CreateUnique(),
                 name,
-                sku,
+                SKU.Create(sku),
                 condition,
                 location,
-                availableQuantity,
-                stockQuantity,
-                price,
+                ProductQuantity.Create(availableQuantity),
+                ProductQuantity.Create(stockQuantity),
+                ProductPrice.Create(price),
                 DateTime.UtcNow,
-                DateTime.UtcNow
-                );
-
-        DomainEvents.Add(new ProductCreatedEvent(this));
-
-        return product;
+                DateTime.UtcNow);
     }
 }
 
-public class ProductCreatedEvent : DomainEvent
+public sealed class ProductId : EntityId<Guid>
 {
-    public ProductCreatedEvent(Product product)
+    public override Guid Value { get; protected set; }
+
+    private ProductId(Guid value)
     {
-        Product = product;
+        Value = value;
     }
 
-    public Product Product { get; }
+    public static ProductId CreateUnique()
+    {
+        return new(Guid.NewGuid());
+    }
+
+    public static ProductId Create(Guid value)
+    {
+        return new(value);
+    }
+
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+}
+
+public enum ProductLocation
+{
+    WAREHOUSE1 = 0,
+    WAREHOUSE2 = 1,
+    WAREHOUSE3 = 2
 }
