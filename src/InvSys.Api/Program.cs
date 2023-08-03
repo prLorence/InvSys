@@ -2,17 +2,9 @@ using InvSys.Application;
 
 using Serilog;
 
-// using var Logger = new LoggerConfiguration()
-//     .WriteTo.Console();
-//     .CreateBootstrapLogger();
-
 var builder = WebApplication.CreateBuilder(args);
 
-using var log = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateLogger();
-
-builder.Host.UseSerilog(log);
+builder.Host.AddSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -21,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
+
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -32,6 +26,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
