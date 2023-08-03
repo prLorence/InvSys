@@ -21,22 +21,20 @@ public class ProductEntityConfigurations : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.Name).HasMaxLength(50);
 
-        // builder.Property(p => p.SKU)
-        //     .HasConversion(
-        //             sku => sku.Value,
-        //             value => SKU.Create(value));
-        builder.OwnsOne(p => p.SKU);
+        builder.OwnsOne(p => p.SKU, psBuilder =>
+                psBuilder.Property(ps => ps.Value));
 
         builder.Property(p => p.Condition).HasMaxLength(20);
 
-        // builder.OwnsOne(p => p.Location);
+        builder.OwnsOne(p => p.AvailableQuantity, ppBuilder =>
+                ppBuilder.Property(pp => pp.Value));
 
-        builder.OwnsOne(p => p.AvailableQuantity);
+        builder.OwnsOne(p => p.StockQuantity, pqBuilder =>
+                pqBuilder.Property(pq => pq.Value));
 
-        builder.OwnsOne(p => p.StockQuantity);
+        builder.OwnsOne(p => p.Price, ppBuilder =>
+                ppBuilder.Property(pp => pp.Value));
 
-        builder.OwnsOne(p => p.Price);
-
-
+        builder.Ignore(p => p.DomainEvents);
     }
 }
