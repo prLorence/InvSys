@@ -6,17 +6,17 @@ namespace InvSys.Application.Entities;
 
 public sealed class Product : AuditableEntity<ProductId>, IHasDomainEvent
 {
-    public string Name { get; private set; }
-    public SKU SKU { get; private set; }
-    public string Condition { get; private set; }
-    public ProductLocation Location { get; private set; }
-    public ProductQuantity AvailableQuantity { get; private set; }
-    public ProductQuantity StockQuantity { get; private set; }
-    public ProductPrice Price { get; private set; }
+    public string Name { get; set; }
+    public SKU SKU { get; set; }
+    public string Condition { get; set; }
+    public ProductLocation Location { get; set; }
+    public ProductQuantity AvailableQuantity { get; set; }
+    public ProductQuantity StockQuantity { get; set; }
+    public ProductPrice Price { get; set; }
 
     public List<DomainEvent> DomainEvents { get; } = new List<DomainEvent>();
 
-    public DateTime CreatedDateTime { get; private set; }
+    public DateTime CreatedDateTime { get; set; }
 
     public DateTime UpdatedDateTime { get; }
 
@@ -50,23 +50,48 @@ public sealed class Product : AuditableEntity<ProductId>, IHasDomainEvent
     }
 
     public static Product Create(
-                          string name,
-                          string sku,
-                          string condition,
-                          ProductLocation location,
-                          int availableQuantity,
-                          int stockQuantity,
-                          double price)
+        ProductId productId,
+        string name,
+        SKU sku,
+        string condition,
+        ProductLocation location,
+        ProductQuantity availableQuantity,
+        ProductQuantity stockQuantity,
+        ProductPrice price,
+        DateTime createdDateTime,
+        DateTime updatedDateTime)
+    {
+        return new Product(
+                productId,
+                name,
+                sku,
+                condition,
+                location,
+                availableQuantity,
+                stockQuantity,
+                price,
+                createdDateTime,
+                updatedDateTime);
+    }
+
+    public static Product Create(
+        string name,
+        SKU sku,
+        string condition,
+        ProductLocation location,
+        ProductQuantity availableQuantity,
+        ProductQuantity stockQuantity,
+        ProductPrice price)
     {
         return new Product(
                 ProductId.CreateUnique(),
                 name,
-                SKU.Create(sku),
+                sku,
                 condition,
                 location,
-                ProductQuantity.Create(availableQuantity),
-                ProductQuantity.Create(stockQuantity),
-                ProductPrice.Create(price),
+                availableQuantity,
+                stockQuantity,
+                price,
                 DateTime.UtcNow,
                 DateTime.UtcNow);
     }
