@@ -1,18 +1,17 @@
 using System.Reflection;
 
+using InvSys.Application.Common.Roles;
 using InvSys.Application.Entities;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace InvSys.Application.Infrastructure;
 
-public class InvSysDbContext : DbContext
+public class InvSysDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
-    protected InvSysDbContext() : base()
-    {
-    }
-
     public InvSysDbContext(DbContextOptions options) : base(options)
     {
     }
@@ -31,4 +30,5 @@ public class InvSysDbContext : DbContext
     }
 
     public DbSet<Product> Products { get; set; } = null!;
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
 }
