@@ -1,4 +1,4 @@
-root = true
+# root = true
 
 # All files
 [*]
@@ -9,7 +9,10 @@ indent_style = space
 indent_size = 2
 
 # C# files
-[*.cs]
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0058.severity = none
+dotnet_diagnostic.IDE0055.severity = none
+dotnet_diagnostic.IDE0160.severity = none
 
 #### Core EditorConfig Options ####
 
@@ -119,7 +122,7 @@ csharp_style_prefer_index_operator = true:suggestion
 csharp_style_prefer_range_operator = true:suggestion
 csharp_style_throw_expression = true:suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
-csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+csharp_style_unused_value_expression_statement_preference = false:none
 
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace:silent
@@ -269,7 +272,6 @@ dotnet_naming_symbols.events.required_modifiers =
 dotnet_naming_symbols.methods.applicable_kinds = method
 dotnet_naming_symbols.methods.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.methods.required_modifiers = 
-
 dotnet_naming_symbols.properties.applicable_kinds = property
 dotnet_naming_symbols.properties.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.properties.required_modifiers = 
@@ -361,4 +363,3 @@ dotnet_naming_style.s_camelcase.required_prefix = s_
 dotnet_naming_style.s_camelcase.required_suffix = 
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
-
