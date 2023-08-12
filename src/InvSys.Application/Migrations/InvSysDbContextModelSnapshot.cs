@@ -46,6 +46,20 @@ namespace InvSys.Application.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2c5e174e-3b0e-446f-86af-483d56fd7210"),
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
+                            Name = "InventoryManager",
+                            NormalizedName = "INVENTORYMANAGER"
+                        });
                 });
 
             modelBuilder.Entity("InvSys.Application.Entities.ApplicationUser", b =>
@@ -110,6 +124,38 @@ namespace InvSys.Application.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2c5e174e-3b0e-446f-86af-483d56fd7210"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5919bc29-3dc4-4c0e-a89b-706a818938eb",
+                            Email = "admin@invsys.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@INVSYS.COM",
+                            NormalizedUserName = "INVSYS-ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJ9VbrFq0kmb81By2wZ60mPW1c+sYeGtiw3KnyWRbtHcrLSAvFGVM9Ag2bFFjq56jA==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "invsys-admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a61d2f3b-8677-45c5-918d-0539d8861178",
+                            Email = "inv-manager@invsys.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "INV-MANAGER@INVSYS.COM",
+                            NormalizedUserName = "INVSYS-INV-MANAGER",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIlV3ZSEkGxWJ6by8SKuBTQSDp65Lnm5xH7enIBP4JhvrNTO1jNehUdWG21KO4oKVg==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "invsys-inv-manager"
+                        });
                 });
 
             modelBuilder.Entity("InvSys.Application.Entities.Product", b =>
@@ -214,6 +260,18 @@ namespace InvSys.Application.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("2c5e174e-3b0e-446f-86af-483d56fd7210"),
+                            RoleId = new Guid("2c5e174e-3b0e-446f-86af-483d56fd7210")
+                        },
+                        new
+                        {
+                            UserId = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
+                            RoleId = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
