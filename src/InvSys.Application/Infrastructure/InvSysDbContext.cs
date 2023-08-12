@@ -2,6 +2,7 @@ using System.Reflection;
 
 using InvSys.Application.Common.Roles;
 using InvSys.Application.Entities;
+using InvSys.Application.Infrastructure.Persistence;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,6 +19,8 @@ public class InvSysDbContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(InvSysDbContext).Assembly);
 
         modelBuilder.Model.GetEntityTypes()
@@ -26,8 +29,9 @@ public class InvSysDbContext : IdentityDbContext<ApplicationUser, ApplicationRol
           .ToList()
           .ForEach(p => p.ValueGenerated = ValueGenerated.Never);
 
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.SeedUsers();
     }
+
 
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
