@@ -23,7 +23,7 @@ public class LoginUserController : ApiControllerBase
 
         if (loginResult.IsFailed)
         {
-            return Problem(loginResult.Errors.Select(e => e.Message));
+            return Problem(loginResult.Errors.Select(e => e.Metadata));
         }
 
         return Ok(loginResult.Value);
@@ -69,7 +69,11 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQueryRe
 
         if (!signInResult)
         {
-            return Result.Fail<LoginQueryResult>($"Incorrect password");
+            var details = new Error(signInResult.ToString());
+
+            details.Metadata.Add("InvalidPassword", "Please try again.");
+
+            return Result.Fail<LoginQueryResult>(details);
         }
 
         var token = _tokenGenerator.Generate(user!);
