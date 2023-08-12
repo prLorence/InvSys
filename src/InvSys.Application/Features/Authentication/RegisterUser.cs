@@ -20,25 +20,11 @@ public class RegisterUserController : ApiControllerBase
     [HttpPost]
     public async Task<ActionResult> Register(RegisterUserCommand command)
     {
-        // return await Mediator.Send();
         var registerResult = await Mediator.Send(command);
 
         if (registerResult.IsFailed)
         {
-            // this line is fugly
-            // return Problem(registerResult.Errors.Select(
-            //             e => new Dictionary<string, object>()
-            //             {
-            //                         { e., e.Message }
-            // }));
-            return Problem(registerResult.Reasons.Select(
-                        r => new Dictionary<string, object>()
-                        {
-                            { "Details", r.Message }
-                        }
-            ));
-            // var errors = registerResult.Errors.Select(e => e.Metadata);
-            // return Problem(errors);
+            return Problem(registerResult.Errors.Select(e => e.Metadata));
         }
 
         return Ok(registerResult.Value);
@@ -81,11 +67,18 @@ public class RegisterUser : IRequestHandler<RegisterUserCommand, Result<Register
             NormalizedUserName = request.Username.ToUpper()
         };
 
-        var identityUser = await _userManager.CreateAsync(newUser, request.Password);
+        var registerResult = await _userManager.CreateAsync(newUser, request.Password);
 
-        if (!identityUser.Succeeded)
+        if (!registerResult.Succeeded)
         {
-            return Result.Fail<RegisterUserResult>(identityUser.Errors.Select(e => e.Description));
+            var details = new Error(registerResult.ToString());
+
+            foreach (var error in registerResult.Errors)
+            {
+                details.Metadata.Add(error.Code, error.Description);
+            }
+
+            return Result.Fail<RegisterUserResult>(details);
         }
 
         var jwt = _jwtTokenGenerator.Generate(newUser);

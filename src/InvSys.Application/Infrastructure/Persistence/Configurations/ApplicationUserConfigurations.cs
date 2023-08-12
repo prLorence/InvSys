@@ -9,13 +9,5 @@ public class ApplicationUserConfigurations : IEntityTypeConfiguration<Applicatio
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        // builder.ToTable("ApplicationUser");
-        //
-        // builder.HasKey(u => u.Id);
-
-        // builder.HasMany(u => u.Claims)
-        //        .WithOne()
-        //        .HasForeignKey(uc => uc.)
-        //        .IsRequired();
     }
 }

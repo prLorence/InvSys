@@ -33,10 +33,6 @@ public class ApiControllerBase : ControllerBase
     {
         var modelStateDictionary = new ModelStateDictionary();
 
-        // var errorMap = messages
-        //   .SelectMany(dictionary => dictionary)
-        //   .Select(item => new KeyValuePair<string, object>(item.Key, item.Value));
-
         foreach (var message in messages)
         {
             modelStateDictionary.AddModelError(message, message ?? "False Error (help me)");

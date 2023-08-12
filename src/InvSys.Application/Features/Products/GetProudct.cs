@@ -14,7 +14,7 @@ namespace InvSys.Application.Features.Products;
 [Route("/api/product")]
 public class GetProductController : ApiControllerBase
 {
-    [HttpGet(Name = "")]
+    [HttpGet]
     public async Task<ActionResult> Get([FromQuery] GetProductQuery query)
     {
         var queryResult = await Mediator.Send(query);
@@ -29,7 +29,6 @@ public class GetProductController : ApiControllerBase
 }
 
 public record GetProductQuery(Guid ProductId) : IRequest<Result<Product>>;
-// TODO: implement paginated list
 
 public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Result<Product>>
 {
